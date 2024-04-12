@@ -7,7 +7,7 @@ Repositorio para la creación de nuestro Trabajo de Fin de Máster en EAE Busine
 ## Metodología 
 
 ## Miembros del grupo 
-1. Gabriel Castillo **Business Intelligence Analyst**
+1. Gabriel Castillo - **Business Intelligence Analyst**
 2. Alvaro Olivas 
 3. María Granda
 4. Miguel Ángel Gómez
