@@ -9,6 +9,6 @@ Repositorio para la creación de nuestro Trabajo de Fin de Máster en EAE Busine
 ## Miembros del grupo 
 1. Gabriel Castillo - **Business Intelligence Analyst**
 2. Alvaro Olivas 
-3. María Granda
+3. María Granda - **Data Analyst**
 4. Miguel Ángel Gómez
 5. Ana Vallenilla
