@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import os
 
-df_20 = pd.read_excel(f"./datos/Radiacion.xlsx")
+df_20 = pd.read_excel(f"./datos/Radiacion2020.xlsx")
 ruta_carpeta="./datos/2020-2023"
 
 dataframes = []
