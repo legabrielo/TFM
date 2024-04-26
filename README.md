@@ -11,5 +11,5 @@ Para nuestro **Trabajo de Fin de Máster** hemos decidido crear un algoritmo par
 1. Gabriel Castillo - **Business Intelligence Analyst**
 2. Alvaro Olivas 
 3. María Granda - **Data Analyst**
-4. Miguel Ángel Gómez
+4. Miguel Ángel Gómez - **Data Scientist**
 5. Ana Vallenilla
