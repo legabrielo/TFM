@@ -3,7 +3,7 @@
 Repositorio para la creación de nuestro Trabajo de Fin de Máster en EAE Business School
 
 ## Descripción del trabajo 
-Para nuestro **Trabajo de Fin de Máster** hemos decidido crear un algoritmo para la creacion de plantas fotovoltaícas en la península de España. Para la creación hemos tenido que obtener información de las subestaciones de la Red Eléctrica Española, información de la meteorología del país y más estación. 
+Para nuestro **Trabajo de Fin de Máster** hemos decidido crear un algoritmo para la creacion de plantas fotovoltaícas en la península de España. Para la creación hemos tenido que obtener información de las subestaciones de la Red Eléctrica Española, información de la meteorología del país y datos relacionados con el precio medio de los terrenos. 
 
 ## Metodología 
 
