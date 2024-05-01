@@ -14,7 +14,7 @@ for column in df.columns[1:]:
     
 # Creamos una serie de tiempo con fechas desde 2021-01 hasta 2023-12, esto cambiara de 2024-01 a 2026-12
 meses = []
-for año in range(2010, 2024):
+for año in range(2010, 2027):
     # Iterate through months (1 to 12)
     for mes in range(1, 13):
         # Create the month string in the desired format
