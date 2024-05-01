@@ -66,4 +66,6 @@ for column in df_precio_euro_m2.columns:
 
 df_kWh_euros = df_kWh_euros.apply(lambda x: x/df_precio_euro_m2.loc[x.name, x.index], axis=1)
 
+print(df_kWh_euros)
+
 df_kWh_euros.to_excel("./datos/kWh_euro.xlsx", index=True)
