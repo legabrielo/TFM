@@ -6,26 +6,26 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import os 
-from sklearn.preprocessing import OneHotEncoder
-from sklearn.neighbors import NearestNeighbors
+# from sklearn.preprocessing import OneHotEncoder
+# from sklearn.neighbors import NearestNeighbors
 import pickle 
 
 
 features = pd.read_csv(r'features.csv')
 res = pd.read_csv(r'total_df.csv')
 
-# modelo = pickle.load(open('Modelo_Radiacion.pkl', 'rb'))
+modelo = pickle.load(open('Modelo_Radiacion.pkl', 'rb'))
 
-# def dar_prediccion(filtered_res):
-#             liked_PALCE = filtered_res.iloc[0]
-#             print(liked_PALCE)
-#             num_recom = 8
-#             _, ind = modelo.kneighbors(features.iloc[[liked_PALCE.name]])
+def dar_prediccion(filtered_res):
+            liked_PALCE = filtered_res.iloc[0]
+            print(liked_PALCE)
+            num_recom = 8
+            _, ind = modelo.kneighbors(features.iloc[[liked_PALCE.name]])
         
-#             st.subheader('Recommended Restaurants')
-#             rec_indices = ind[0][0:num_recom]
-#             rec_resta = res.iloc[rec_indices, :]
-#             st.write(rec_resta)
+            st.subheader('Recommended Restaurants')
+            rec_indices = ind[0][0:num_recom]
+            rec_resta = res.iloc[rec_indices, :]
+            st.write(rec_resta)
 
     
 
@@ -48,8 +48,6 @@ def main():
     else:
         if st.button("Obtener restaurantes"):
             dar_prediccion(filtered_res)
-
-    st.map()
 
 
 if __name__ =="__main__":
