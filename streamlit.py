@@ -43,10 +43,10 @@ def main():
     # Añadir aquí un buclque para que primero pono ponga nada (done)
 
     if filtered_res.empty:
-        if st.button("Obtener restaurantes"):
+        if st.button("Obtener Terrenos"):
             st.write('No hay recomendación todavía')
     else:
-        if st.button("Obtener restaurantes"):
+        if st.button("Obtener Terrenos"):
             dar_prediccion(filtered_res)
 
 
