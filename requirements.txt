@@ -1,6 +1,9 @@
+
+
+streamlit
 pandas
 numpy
+scikit-learn
 openpyxl
 matplotlib
 geopy
-streamlit
