@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from pmdarima import auto_arima
 from statsmodels.tsa.arima.model import ARIMA
 from statsmodels.tsa.stattools import adfuller
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
@@ -16,6 +17,20 @@ for column in df.columns[1:]:
     df_provincia = df[['Fecha', column]]
     df_provincia.name = column
     dfs.append(df_provincia)
+ 
+# Crear un modelo Auto-ARIMA para cada provincia
+predictions = []   
+def modelo_auto_ARIMA(dfs):
+    for df_provincia in dfs:
+        model = auto_arima(df_provincia.iloc[:, 1], seasonal=False, suppress_warnings=True)
+        model_fit = model.fit(y=df_provincia.iloc[:, 1])  # Pass 'y' explicitly
+
+        # Make predictions
+        provincia_predictions = model_fit.predict(n_periods=36)
+        predictions.append(provincia_predictions)
+        print(f'Predicciones para {df_provincia.name}:\n{provincia_predictions}')
+        break
+    # Esto es una prueba, habría que ver que eficacia tiene el modelo...
 
 def comparacion_diferenciacion(provincia):
     for df_provincia in dfs:
@@ -35,22 +50,27 @@ def comparacion_diferenciacion(provincia):
             plt.show()
             break
     
-for df_provincia in dfs: 
-    #Diferenciación   
-    result = adfuller(df_provincia.iloc[:, 1]) #Usando la prueba de Dickey-Fuller, documenta!
-    d = 0
-    # print(f'{df_provincia.name}')
-    # print('Serie Original - AD Statistic: %f' % result[0])
-    # print('Serie Original - p-value: %f' % result[1]) #Como es menor a 0.05, podemos rechazar la hipotesis nula. Es estacionaria.
-    if result[1] > 0.05:
-        result1 = adfuller(df_provincia.iloc[:, 1].diff().dropna())
-        d = 1 if result1[1] < 0.05 else d
-        # print('Primera diferenciación - AD Statistic: %f' % result1[0])
-        # print('Primera diferenciación - p-value: %f' % result1[1]) #Como es menor a 0.05, podemos rechazar la hipotesis nula. Es estacionaria.
-    print(f'Diferenciación de {df_provincia.name} es {d}')
+# Creamos un modelo ARIMA para cada provincia
+def modelo_ARIMA(dfs):
+    for df_provincia in dfs: 
+        #Diferenciación   
+        result = adfuller(df_provincia.iloc[:, 1]) #Usando la prueba de Dickey-Fuller, documenta!
+        d = 0
+        # print(f'{df_provincia.name}')
+        # print('Serie Original - AD Statistic: %f' % result[0])
+        # print('Serie Original - p-value: %f' % result[1]) #Como es menor a 0.05, podemos rechazar la hipotesis nula. Es estacionaria.
+        if result[1] > 0.05:
+            result1 = adfuller(df_provincia.iloc[:, 1].diff().dropna())
+            d = 1 if result1[1] < 0.05 else d
+            # print('Primera diferenciación - AD Statistic: %f' % result1[0])
+            # print('Primera diferenciación - p-value: %f' % result1[1]) #Como es menor a 0.05, podemos rechazar la hipotesis nula. Es estacionaria.
+        print(f'Diferenciación de {df_provincia.name} es {d}')
+            
+            #Auto-Correlación
+            
     
-    #Auto-Correlación
 
+modelo_ARIMA(dfs)
 
 
 
