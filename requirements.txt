@@ -5,3 +5,4 @@ scikit-learn
 openpyxl
 matplotlib
 geopy
+statsmodels
