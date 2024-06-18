@@ -10,12 +10,18 @@ warnings.filterwarnings("ignore")
 df = pd.read_excel(f"./datos/Radiacion.xlsx")
 
 # Crear un DataFrame con las columnas "Fecha" y "Provincia" por cada porvincia
+fechas=pd.date_range(start='1/1/2010', end='12/1/2023', freq='MS')
+
 dfs = []
 for column in df.columns[1:]:
-    df_provincia = df[['Fecha', column]]
+    radiacion = df[column]
+    df_provincia = pd.DataFrame({
+        'Fecha': fechas,
+        f'{column}': radiacion
+    })
     df_provincia.name = column
     dfs.append(df_provincia)
-
+    
 def grafica_acf(provincia):
     for df_provincia in dfs:
         if df_provincia.name == provincia:
@@ -76,26 +82,14 @@ def ad_fuller(df):
     print('p-value: %f' % result[1])
 
 def predicciones_auto_ARIMA(dfs, año):
-    # Creamos una serie de tiempo con fechas desde 2021-01 hasta 2023-12, esto cambiara de 2024-01 a 2026-12
     predictions = []
-    meses = []
-    num_pred = (año-2023)*12
-    for año in range(2010, año):
-        # Iterate through months (1 to 12)
-        for mes in range(1, 13):
-            # Create the month string in the desired format
-            mes_str = f"{año}_{mes:02d}"
-            meses.append(mes_str)
-            
-    tiempo = pd.Series(meses)
-    
+    num_pred = (año-2023)*12    
     for df_provincia in dfs:
-        model = auto_arima(df_provincia.iloc[:, 1], m=12, seasonal=True, suppress_warnings=True)
-        model_fit = model.fit(y=df_provincia.iloc[:, 1])  # Pass 'y' explicitly
-        print(model_fit.summary())
+        model = auto_arima(df_provincia.iloc[:, 1], m=12, seasonal=True, trace=False, suppress_warnings=True, error_action="ignore")
+        model = model.fit(y=df_provincia.iloc[:, 1])  # Pass 'y' explicitly
         
         # Make predictions
-        provincia_predictions = model_fit.predict(n_periods=num_pred)
+        provincia_predictions = model.predict(n_periods=num_pred)
         predictions.append(provincia_predictions)
         print(f'Predicciones para {df_provincia.name}:\n{provincia_predictions}')
         
@@ -106,27 +100,32 @@ def predicciones_auto_ARIMA(dfs, año):
 def resumen_modelo(provincia):
     for df_provincia in dfs:
         if df_provincia.name == provincia:
-            model = auto_arima(df_provincia.iloc[:, 1], seasonal=True, suppress_warnings=True)
+            model = auto_arima(df_provincia.iloc[:, 1], m=12, seasonal=True, trace=False, suppress_warnings=True, error_action="ignore")
             print(model.summary())
 
 def prediccion(provincia, año):
-    num_pred = (año-2023)*12
+    num_pred = (año-2021)*12
+    fechas_pred=pd.date_range(start='1/1/2022', end=f'12/1/{año}', freq='MS')
     for df_provincia in dfs:
         if df_provincia.name == provincia:
-            train,test=df_provincia[:-24],df_provincia[-24:]
-            model = auto_arima(train.iloc[:, 1], trace=True, m=12, seasonal=True, suppress_warnings=True)
+            train, test=df_provincia[:-24],df_provincia[-24:]
+            model = auto_arima(train.iloc[:, 1], m=12, seasonal=True, trace=False, suppress_warnings=True, error_action="ignore")
             model = model.fit(y=train.iloc[:, 1])  # Pass 'y' explicitly
-            provincia_predictions = model.predict(n_periods=24)   
-            plt.plot(train.iloc[:, 1], label='Train')
-            plt.plot(test.iloc[:, 1], label='Valid')   
-            plt.plot(provincia_predictions, label='Prediction')
+            provincia_predictions = model.predict(n_periods=num_pred, freq='M')   
+            predicciones = pd.DataFrame({
+                'Fecha': fechas_pred,
+                f'{column}': provincia_predictions
+            })
+            plt.plot(train['Fecha'], train.iloc[:, 1], label='Train')
+            plt.plot(test['Fecha'], test.iloc[:, 1], label='Valid')   
+            plt.plot(predicciones['Fecha'], predicciones.iloc[:, 1], label='Prediction')
             plt.legend()
             plt.show()
 
 def residuos(provincia):
     for df_provincia in dfs:
         if df_provincia.name == provincia:
-            model = auto_arima(df_provincia.iloc[:, 1], seasonal=True, suppress_warnings=True)
+            model = auto_arima(df_provincia.iloc[:, 1], m=12, seasonal=True, trace=False, suppress_warnings=True, error_action="ignore")
             residuos = model.resid()
             plt.plot(residuos)
             plt.title('Residuos')
@@ -134,28 +133,6 @@ def residuos(provincia):
 
 # predicciones_auto_ARIMA(dfs, 2030)
 # resumen_modelo('Almeria')
-# residuos('Malaga')
-prediccion('Lerida',2030)
+residuos('Malaga')
+# prediccion('Jaen',2023)
 
-
-
-
-
-
-
-
-
-
-# # Usar el modelo ARIMA para predecir la radiación solar para cada provincia
-# predictions = []
-
-# # Creamos una serie de tiempo con fechas desde 2021-01 hasta 2023-12, esto cambiara de 2024-01 a 2026-12
-# meses = []
-# for año in range(2010, 2027):
-#     # Iterate through months (1 to 12)
-#     for mes in range(1, 13):
-#         # Create the month string in the desired format
-#         mes_str = f"{año}_{mes:02d}"
-#         meses.append(mes_str)
-        
-# tiempo = pd.Series(meses)
